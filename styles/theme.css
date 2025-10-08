@@ -1,0 +1,158 @@
+/* Crypto/Blockchain Theme - Exact Specifications */
+
+:root {
+  --bg: #0B0A12;
+  --panel: rgba(12, 10, 20, 0.6);
+  --ring: #A855F7;
+  --ring2: #22D3EE;
+  --text: #EDEAF7;
+}
+
+/* Base body styling with exact radial gradients */
+body {
+  background: 
+    radial-gradient(1200px circle at 20% -10%, #3a1a5e33, transparent 40%),
+    radial-gradient(900px circle at 100% 10%, #0aa5bc22, transparent 35%),
+    var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Subtle SVG grid overlay at opacity 0.05 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 85, 247, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Glass panels - exact specifications */
+.glass-panel {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: 1rem;
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
+}
+
+/* Neon glow effects */
+.neon-glow {
+  box-shadow: 
+    0 0 5px var(--ring),
+    0 0 10px var(--ring),
+    0 0 15px var(--ring),
+    0 0 20px var(--ring);
+}
+
+.neon-glow-cyan {
+  box-shadow: 
+    0 0 5px var(--ring2),
+    0 0 10px var(--ring2),
+    0 0 15px var(--ring2),
+    0 0 20px var(--ring2);
+}
+
+/* Animated gradient borders */
+@keyframes gradient-border {
+  0% {
+    border-color: var(--ring);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+  }
+  50% {
+    border-color: var(--ring2);
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.3);
+  }
+  100% {
+    border-color: var(--ring);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+  }
+}
+
+.animated-border {
+  animation: gradient-border 3s ease-in-out infinite;
+}
+
+/* Soft glows and animated gradient rings behind cards */
+.card-glow {
+  position: relative;
+}
+
+.card-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, var(--ring), var(--ring2), var(--ring));
+  border-radius: inherit;
+  opacity: 0.3;
+  filter: blur(8px);
+  z-index: -1;
+  animation: gradient-border 3s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, var(--ring), var(--ring2));
+  border-radius: 4px;
+  box-shadow: 0 0 10px var(--ring);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, var(--ring2), var(--ring));
+  box-shadow: 0 0 15px var(--ring2);
+}
+
+/* Focus states */
+*:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Selection styling */
+::selection {
+  background: var(--ring);
+  color: white;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .animated-border,
+  .card-glow::before {
+    animation: none !important;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  body::before {
+    background-size: 30px 30px;
+  }
+  
+  .glass-panel {
+    border-radius: 0.75rem;
+  }
+}
