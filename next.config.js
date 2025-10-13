@@ -8,7 +8,13 @@ const nextConfig = {
   experimental: {
     appDir: false, // Keep this false for pages directory
     esmExternals: "loose", // This helps with ESM/CommonJS compatibility
+    scrollRestoration: true,
   },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+  poweredByHeader: false,
+  compress: true,
   transpilePackages: [
     "@vanilla-extract/sprinkles",
     "@rainbow-me/rainbowkit",

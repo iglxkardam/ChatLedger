@@ -17,11 +17,12 @@ import {
   FiStar,
   FiZap,
 } from "react-icons/fi";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChatAppABI, CONTRACT_ADDRESS } from "../../contracts/ChatApp";
 import Avatar from "../Common/Avatar";
 
 /* =========================================================================
-   FriendsList — Cyberpunk Neural Network (No logic changed)
+   FriendsList — Messenger.com Style Design
    ========================================================================= */
 
 const FriendsList = ({ onStartChat, hideSection }) => {
@@ -161,194 +162,249 @@ const FriendsList = ({ onStartChat, hideSection }) => {
   }, []);
 
   return (
-    <div ref={rootRef} className="relative flex h-full flex-col space-y-6 overflow-hidden">
-      {/* Header */}
+    <motion.div 
+      ref={rootRef} 
+      className="flex h-full flex-col bg-messenger-chat-bg"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      {/* Header Section */}
       {hideSection && (
-        <div className="space-y-6">
-          <div className="text-center space-y-4">
-            <div className="inline-flex items-center gap-2 rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-3 py-1 text-xs text-fuchsia-300">
-              <span className="h-2 w-2 rounded-full bg-fuchsia-500 animate-pulse" />
-              Live
-              <span className="text-gray-400">• friends • search • chat</span>
-            </div>
-
-            <h1 className="text-2xl md:text-3xl font-bold text-white">
-              Friends Hub
-            </h1>
-            <p className="text-gray-400">Manage connections and start chats instantly.</p>
-          </div>
-
-          <div className="max-w-xl mx-auto">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search friends…"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 bg-[#0E0B12]/60 backdrop-blur-sm border border-fuchsia-500/20 rounded-xl text-white placeholder-gray-400 focus:border-fuchsia-500/50 focus:ring-2 focus:ring-fuchsia-500/20"
-              />
-              <FiSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-            </div>
-          </div>
-
-          <div className="text-center">
-            <button
-              onClick={() => setShowAddFriend((v) => !v)}
-              className={`inline-flex items-center gap-2 rounded-xl px-4 py-3 font-medium transition-all duration-300
-              border border-fuchsia-500/20 bg-fuchsia-500/10 text-fuchsia-300 hover:border-fuchsia-500/50 hover:bg-fuchsia-500/20 hover:scale-105`}
-            >
-              {showAddFriend ? <FiX size={16} /> : <FiUserPlus size={16} />}
-              {showAddFriend ? "Cancel" : "Add Friend"}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Add Friends picker */}
-      {showAddFriend && (
-        <div className="bg-[#0E0B12]/60 backdrop-blur-xl rounded-2xl border border-fuchsia-500/20 shadow-lg">
-          <div className="flex items-center gap-3 border-b border-fuchsia-500/20 px-6 py-4">
-            <div className="w-8 h-8 rounded-lg bg-fuchsia-500/20 border border-fuchsia-500/20 flex items-center justify-center">
-              <FiUserPlus className="text-fuchsia-400" size={16} />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-white">Add New Friends</h3>
-              <p className="text-sm text-gray-400">Discover and connect with users</p>
-            </div>
-          </div>
-          
-          <div className="max-h-80 space-y-3 overflow-y-auto p-6">
-            {potentialFriends.length > 0 ? (
-              potentialFriends.map((u) => (
-                <div key={u.accountAddress} className="flex items-center justify-between rounded-xl border border-fuchsia-500/20 bg-[#0E0B12]/40 p-4 hover:bg-fuchsia-500/10 transition-all duration-200">
-                  <div className="flex items-center gap-3">
-                    <Avatar
-                      profilePicture=""
-                      name={u.name}
-                      address={u.accountAddress}
-                      size="md"
-                    />
-                    <div>
-                      <p className="font-medium text-white">{u.name}</p>
-                      <p className="font-mono text-sm text-gray-400">
-                        {u.accountAddress.slice(0, 6)}…{u.accountAddress.slice(-4)}
-                      </p>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => handleAddFriend(u)}
-                    disabled={isPending || isConfirming}
-                    className="inline-flex items-center gap-2 rounded-xl border border-fuchsia-500/20 bg-fuchsia-500/10 px-4 py-2 text-fuchsia-300 hover:border-fuchsia-500/50 hover:bg-fuchsia-500/20 transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {isPending || isConfirming ? (
-                      <>
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-fuchsia-500/20 border-t-fuchsia-500" />
-                        Adding…
-                      </>
-                    ) : (
-                      <>
-                        <FiCheck size={16} />
-                        Add
-                      </>
-                    )}
-                  </button>
-                </div>
-              ))
-            ) : (
-              <div className="py-10 text-center">
-                <div className="mx-auto mb-4 w-16 h-16 rounded-full border border-crypto-border bg-crypto-panel flex items-center justify-center">
-                  <FiUser className="text-crypto-text-muted" size={32} />
-                </div>
-                <div className="text-lg text-crypto-text">No users found</div>
-                <div className="text-sm text-crypto-text-muted">Try adjusting your search or check back later.</div>
+        <motion.div 
+          className="bg-white border-b border-gray-200 px-6 py-6"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
+          <div className="space-y-6">
+            {/* Title Section */}
+            <div className="text-center space-y-4">
+              <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-sm font-medium">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span>Live</span>
+                <span className="text-gray-500">•</span>
+                <span>Friends</span>
+                <span className="text-gray-500">•</span>
+                <span>Connect</span>
               </div>
-            )}
+              
+              <h1 className="text-3xl font-bold text-gray-900">
+                Friends
+              </h1>
+              <p className="text-gray-600 max-w-md mx-auto">
+                Connect with friends and start conversations instantly
+              </p>
+            </div>
+
+            {/* Search Bar */}
+            <div className="max-w-md mx-auto">
+              <div className="relative">
+                <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <input
+                  type="text"
+                  placeholder="Search friends..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:bg-white focus:border-blue-300 focus:ring-4 focus:ring-blue-100 transition-all duration-200"
+                />
+              </div>
+            </div>
+
+            {/* Add Friend Button */}
+            <div className="text-center">
+              <button
+                onClick={() => setShowAddFriend((v) => !v)}
+                className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200 shadow-sm hover:shadow-md"
+              >
+                {showAddFriend ? <FiX size={18} /> : <FiUserPlus size={18} />}
+                {showAddFriend ? "Cancel" : "Add Friend"}
+              </button>
+            </div>
           </div>
-        </div>
+        </motion.div>
       )}
+
+      {/* Add Friends Section */}
+      <AnimatePresence>
+        {showAddFriend && (
+          <motion.div 
+            className="bg-white border-b border-gray-200 px-6 py-4"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="bg-gray-50 rounded-xl border border-gray-200">
+              <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-200">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <FiUserPlus className="text-blue-600" size={20} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Add New Friends</h3>
+                  <p className="text-sm text-gray-600">Discover and connect with users</p>
+                </div>
+              </div>
+              
+              <div className="max-h-80 space-y-2 overflow-y-auto p-6">
+                {potentialFriends.length > 0 ? (
+                  potentialFriends.map((u, index) => (
+                    <motion.div 
+                      key={u.accountAddress} 
+                      className="flex items-center justify-between bg-white border border-gray-200 rounded-lg p-4 hover:border-blue-300 hover:shadow-sm transition-all duration-200"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.2, delay: index * 0.05 }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Avatar
+                          profilePicture=""
+                          name={u.name}
+                          address={u.accountAddress}
+                          size="md"
+                        />
+                        <div>
+                          <p className="font-medium text-gray-900">{u.name}</p>
+                          <p className="text-sm text-gray-500 font-mono">
+                            {u.accountAddress.slice(0, 6)}…{u.accountAddress.slice(-4)}
+                          </p>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => handleAddFriend(u)}
+                        disabled={isPending || isConfirming}
+                        className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 disabled:cursor-not-allowed"
+                      >
+                        {isPending || isConfirming ? (
+                          <>
+                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                            Adding...
+                          </>
+                        ) : (
+                          <>
+                            <FiCheck size={16} />
+                            Add
+                          </>
+                        )}
+                      </button>
+                    </motion.div>
+                  ))
+                ) : (
+                  <div className="py-12 text-center">
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FiUser className="text-gray-400" size={32} />
+                    </div>
+                    <div className="text-lg text-gray-900 font-medium">No users found</div>
+                    <div className="text-sm text-gray-500">Try adjusting your search or check back later</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Friends List */}
-      <div className="bg-crypto-panel backdrop-blur-xl rounded-2xl border border-crypto-border shadow-lg flex flex-1 flex-col overflow-hidden">
-        <div className="flex items-center justify-between border-b border-crypto-border px-6 py-4">
+      <motion.div 
+        className="flex-1 bg-white flex flex-col min-h-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.2 }}
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-crypto-ring-2/20 border border-crypto-border flex items-center justify-center">
-              <FiUsers className="text-crypto-ring-2" size={16} />
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+              <FiUsers className="text-blue-600" size={20} />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-crypto-text">Your Friends</h3>
-              <p className="text-sm text-crypto-text-muted">{filteredFriends.length} connections</p>
+              <h3 className="text-lg font-semibold text-gray-900">Your Friends</h3>
+              <p className="text-sm text-gray-600">{filteredFriends.length} connections</p>
             </div>
           </div>
-          <div className="inline-flex items-center gap-2 rounded-lg border border-crypto-border bg-crypto-panel px-3 py-1 text-crypto-ring">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-crypto-ring" />
-            Live
+          <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-3 py-1 rounded-lg text-sm font-medium">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            Online
           </div>
         </div>
 
         {loadingProfilePics && (
-          <div className="px-6 py-5 text-center">
-            <div className="mx-auto inline-flex items-center gap-3 rounded-xl border border-crypto-border bg-crypto-panel px-4 py-3 text-crypto-text">
-              <div className="relative">
-                <div className="h-6 w-6 animate-spin rounded-full border-2 border-crypto-ring/30 border-t-crypto-ring" />
-                <div className="absolute inset-0 rounded-full border-2 border-crypto-ring/10" />
-              </div>
-              Loading profile pictures…
+          <div className="px-6 py-8 text-center flex-shrink-0">
+            <div className="inline-flex items-center gap-3 bg-gray-50 px-6 py-3 rounded-xl">
+              <div className="w-6 h-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-500"></div>
+              <span className="text-gray-700 font-medium">Loading profile pictures...</span>
             </div>
           </div>
         )}
 
-        <div className="flex-1 space-y-3 overflow-y-auto p-6">
-          {filteredFriends.length > 0 ? (
-            filteredFriends.map((f) => (
-              <div key={f.pubkey} className="flex items-center justify-between rounded-xl border border-crypto-border bg-black/10 p-4 hover:bg-black/20 transition-all duration-200 group">
-                <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <Avatar
-                      profilePicture={f.profilePicture}
-                      name={f.name}
-                      address={f.pubkey}
-                      size="lg"
-                    />
-                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-to-r from-crypto-ring-2 to-crypto-ring rounded-full border-2 border-crypto-bg">
-                      <div className="absolute inset-0.5 bg-gradient-to-r from-crypto-ring-2 to-crypto-ring rounded-full animate-pulse"></div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="text-lg font-medium text-crypto-text">{f.name}</p>
-                    <p className="font-mono text-sm text-crypto-text-muted">
-                      {f.pubkey.slice(0, 6)}…{f.pubkey.slice(-4)}
-                    </p>
-                    <div className="mt-1 flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-crypto-ring animate-pulse" />
-                      <span className="text-xs text-crypto-ring">Online</span>
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => onStartChat(f)}
-                  className="inline-flex items-center gap-2 rounded-xl border border-crypto-border bg-crypto-panel px-4 py-2 text-crypto-ring-2 hover:border-crypto-ring-2 hover:bg-crypto-ring-2/10 transition-all duration-200 opacity-0 group-hover:opacity-100"
+        <div className="flex-1 overflow-y-auto min-h-0 friends-scrollbar">
+          <div className="p-6 space-y-3">
+            {filteredFriends.length > 0 ? (
+              filteredFriends.map((f, index) => (
+                <motion.div 
+                  key={f.pubkey} 
+                  className="flex items-center justify-between bg-gray-50 hover:bg-blue-50 rounded-lg p-4 transition-colors duration-200 group"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.2, delay: index * 0.05 }}
+                  whileHover={{ scale: 1.02 }}
                 >
-                  <FiMessageCircle size={16} />
-                  Chat
-                </button>
-              </div>
-            ))
-          ) : (
-            <div className="py-10 text-center">
-              <div className="mx-auto mb-4 w-16 h-16 rounded-full border border-crypto-border bg-crypto-panel flex items-center justify-center">
-                <FiUser className="text-crypto-ring-2" size={32} />
-              </div>
-              <div className="text-lg text-crypto-text">No friends yet</div>
-              <div className="text-sm text-crypto-text-muted">Add some friends to start chatting.</div>
-            </div>
-          )}
-        </div>
-      </div>
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <Avatar
+                        profilePicture={f.profilePicture}
+                        name={f.name}
+                        address={f.pubkey}
+                        size="lg"
+                      />
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white">
+                        <div className="w-full h-full bg-green-500 rounded-full"></div>
+                      </div>
+                    </div>
 
-    </div>
+                    <div>
+                      <p className="text-lg font-medium text-gray-900">{f.name}</p>
+                      <p className="text-sm text-gray-500 font-mono">
+                        {f.pubkey.slice(0, 6)}…{f.pubkey.slice(-4)}
+                      </p>
+                      <div className="mt-1 flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span className="text-xs text-green-600 font-medium">Online</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => onStartChat(f)}
+                    className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 opacity-0 group-hover:opacity-100"
+                  >
+                    <FiMessageCircle size={16} />
+                    Chat
+                  </button>
+                </motion.div>
+              ))
+            ) : (
+              <div className="py-16 text-center">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <FiUser className="text-gray-400" size={40} />
+                </div>
+                <div className="text-xl text-gray-900 font-medium mb-2">No friends yet</div>
+                <div className="text-gray-600">Add some friends to start chatting</div>
+                <div className="mt-4">
+                  <button
+                    onClick={() => setShowAddFriend(true)}
+                    className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
+                  >
+                    <FiUserPlus size={18} />
+                    Find Friends
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

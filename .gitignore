@@ -26,6 +26,14 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
+# local env files (prevent accidental commits of env/secrets)
+.env
+.env.*
+.env.local
+web3/.env
+web3/.env.*
+.secret
+.private
 
 
 # vercel

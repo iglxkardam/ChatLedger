@@ -1,6 +1,5 @@
-// pages/index.js - Blockchain Ecosystem Landing Page
 import OptimizedLandingPage from "../components/Landing/OptimizedLanding";
 
-export default function Home() {
+export default function LandingPage() {
   return <OptimizedLandingPage />;
 }

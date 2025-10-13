@@ -54,5 +54,13 @@ export const uploadToPinata = async (file) => {
 };
 
 export const getIPFSUrl = (hash) => {
-  return `https://gateway.pinata.cloud/ipfs/${hash}`;
+  // Use multiple gateways for better reliability
+  const gateways = [
+    `https://ipfs.io/ipfs/${hash}`,
+    `https://gateway.pinata.cloud/ipfs/${hash}`,
+    `https://cloudflare-ipfs.com/ipfs/${hash}`,
+  ];
+  
+  // Return the first gateway (ipfs.io is generally more reliable)
+  return gateways[0];
 };

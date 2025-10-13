@@ -93,6 +93,26 @@ const ChatInterface = ({ selectedFriend, onBack }) => {
     const k = getFriendMessagingKeyB64(selectedFriend.pubkey);
     setFriendKeyB64(k);
   }, [selectedFriend]);
+
+  // Auto-decrypt text messages
+  useEffect(() => {
+    if (!messages) return;
+    
+    messages.forEach((msg, index) => {
+      const messageType = parseInt(msg.msgType);
+      if (messageType === MESSAGE_TYPES.TEXT && typeof msg.content === "string" && msg.content.startsWith("cid:")) {
+        const cid = msg.content.slice(4);
+        if (!decryptedText[index]) {
+          fetchAndDecryptText(cid).then(t => {
+            setDecryptedText(prev => ({...prev, [index]: t}));
+          }).catch(e => {
+            console.error("Decryption failed for message", index, e);
+            setDecryptedText(prev => ({...prev, [index]: "[Decryption failed]"}));
+          });
+        }
+      }
+    });
+  }, [messages, decryptedText]);
 const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -226,13 +246,6 @@ const handleSendAvax = () => {
   const renderMessage = (msg, index) => {
     const isOwn = msg.sender === address;
     const messageType = parseInt(msg.msgType);
-    // Auto-decrypt text messages that reference an IPFS cid
-    if (messageType === MESSAGE_TYPES.TEXT && typeof msg.content === "string" && msg.content.startsWith("cid:")) {
-      const cid = msg.content.slice(4);
-      if (!decryptedText[index]) {
-        fetchAndDecryptText(cid).then(t => setDecryptedText(prev => ({...prev, [index]: t})));
-      }
-    }
 
     return (
       <div

@@ -37,7 +37,11 @@ const ProfilePictureUpload = ({
       toast.success("Profile picture updated successfully!");
       setPreviewUrl(null);
       setSelectedFile(null);
-      onUpdate();
+      
+      // Add a delay to allow blockchain to update before refetching
+      setTimeout(() => {
+        onUpdate();
+      }, 2000);
     }
   }, [isConfirmed, onUpdate]);
 
@@ -132,9 +136,9 @@ const ProfilePictureUpload = ({
       <div className="flex flex-col items-center">
         {/* Main Profile Picture */}
         <div className="relative group">
-          {/* Picture frame with gradient border */}
-          <div className="relative w-40 h-40 bg-gradient-to-r from-fuchsia-500/20 to-purple-600/20 rounded-full p-1 shadow-2xl shadow-purple-600/20">
-            <div className="relative w-full h-full bg-[#0E0B12] rounded-full overflow-hidden border-2 border-fuchsia-500/30">
+          {/* Picture frame with clean border */}
+          <div className="relative w-40 h-40 bg-gray-100 rounded-full p-1 shadow-lg border-2 border-gray-200">
+            <div className="relative w-full h-full bg-white rounded-full overflow-hidden">
               <img
                 src={
                   previewUrl ||
@@ -143,23 +147,24 @@ const ProfilePictureUpload = ({
                     : "/logo.png")
                 }
                 alt="Profile"
-                className="w-full h-full object-cover transition-all duration-300 group-hover:scale-110"
+                className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
                 onError={(e) => {
+                  console.log("Profile image error:", e.target.src);
                   e.target.src = "/logo.png";
+                }}
+                onLoad={() => {
+                  console.log("Profile image loaded successfully:", currentProfilePicture);
                 }}
               />
 
-              {/* Overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
               {/* Loading overlay */}
               {isLoading && (
-                <div className="absolute inset-0 bg-[#0E0B12]/80 backdrop-blur-sm flex items-center justify-center">
+                <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center">
                   <div className="relative">
-                    <div className="w-12 h-12 border-4 border-fuchsia-500/20 border-t-fuchsia-500 rounded-full animate-spin"></div>
+                    <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
                       <FiLoader
-                        className="text-fuchsia-400 animate-pulse"
+                        className="text-blue-500 animate-pulse"
                         size={20}
                       />
                     </div>
@@ -174,16 +179,15 @@ const ProfilePictureUpload = ({
               disabled={isLoading}
               className="
                 absolute bottom-2 right-2 
-                w-12 h-12 bg-gradient-to-r from-fuchsia-500 to-purple-600 
-                hover:from-fuchsia-600 hover:to-purple-700 
+                w-12 h-12 bg-blue-500 
+                hover:bg-blue-600 
                 text-white rounded-full 
-                shadow-lg shadow-fuchsia-500/30 
-                hover:shadow-xl hover:shadow-purple-500/40
+                shadow-lg 
                 transition-all duration-300 
                 hover:scale-110 active:scale-95
                 disabled:opacity-50 disabled:scale-100
                 flex items-center justify-center
-                border-2 border-white/20
+                border-2 border-white
               "
             >
               <FiCamera size={18} />
@@ -191,7 +195,7 @@ const ProfilePictureUpload = ({
 
             {/* Success indicator */}
             {isConfirmed && (
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full border-2 border-[#0E0B12] flex items-center justify-center animate-bounce">
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-2 border-white flex items-center justify-center animate-bounce">
                 <FiCheck className="text-white" size={14} />
               </div>
             )}
@@ -199,8 +203,8 @@ const ProfilePictureUpload = ({
 
           {/* Status text */}
           <div className="mt-4 text-center">
-            <p className="text-white font-medium">Profile Picture</p>
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-900 font-semibold text-lg">Profile Picture</p>
+            <p className="text-gray-600 text-sm">
               {isLoading
                 ? uploading
                   ? "Uploading to IPFS..."
@@ -219,37 +223,33 @@ const ProfilePictureUpload = ({
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
           className={`
-            relative border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer
-            transition-all duration-300 backdrop-blur-sm
+            relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer
+            transition-all duration-300
             ${
               dragOver
-                ? "border-fuchsia-500/60 bg-fuchsia-500/10 scale-105"
-                : "border-fuchsia-500/30 bg-gradient-to-br from-[#0E0B12]/40 to-[#0E0B12]/20 hover:border-fuchsia-500/50 hover:bg-fuchsia-500/5"
+                ? "border-blue-500 bg-blue-50 scale-105"
+                : "border-gray-300 bg-gray-50 hover:border-blue-400 hover:bg-blue-50"
             }
           `}
         >
           <div className="space-y-4">
-            <div className="w-16 h-16 bg-gradient-to-r from-fuchsia-500/20 to-purple-600/20 rounded-2xl flex items-center justify-center mx-auto border border-fuchsia-500/30">
-              <FiImage className="text-fuchsia-400" size={28} />
+            <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mx-auto border border-blue-200">
+              <FiImage className="text-blue-500" size={28} />
             </div>
 
             <div>
-              <p className="text-white font-medium mb-2">
+              <p className="text-gray-900 font-semibold mb-2">
                 {dragOver ? "Drop image here" : "Drag & drop an image"}
               </p>
-              <p className="text-gray-400 text-sm">or click to browse files</p>
+              <p className="text-gray-600 text-sm">or click to browse files</p>
             </div>
 
-            <div className="text-xs text-gray-500 space-y-1">
+            <div className="text-xs text-gray-600 space-y-1">
               <p>• Supported: JPG, PNG, GIF, WebP</p>
               <p>• Maximum size: 5MB</p>
               <p>• Recommended: Square images work best</p>
             </div>
           </div>
-
-          {/* Animated background elements */}
-          <div className="absolute top-4 right-4 w-2 h-2 bg-fuchsia-400/40 rounded-full animate-pulse"></div>
-          <div className="absolute bottom-4 left-4 w-1 h-1 bg-purple-400/40 rounded-full animate-ping"></div>
         </div>
       )}
 
@@ -266,14 +266,14 @@ const ProfilePictureUpload = ({
       {selectedFile && !isLoading && (
         <div className="space-y-4">
           {/* File info */}
-          <div className="bg-gradient-to-r from-[#0E0B12]/60 to-[#0E0B12]/40 backdrop-blur-sm rounded-xl border border-fuchsia-500/20 p-4">
+          <div className="bg-gray-50 rounded-xl border border-gray-200 p-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-green-500/20 to-emerald-600/20 rounded-lg flex items-center justify-center border border-green-500/30">
-                <FiImage className="text-green-400" size={18} />
+              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center border border-green-200">
+                <FiImage className="text-green-600" size={18} />
               </div>
               <div>
-                <p className="text-white font-medium">{selectedFile.name}</p>
-                <p className="text-gray-400 text-sm">
+                <p className="text-gray-900 font-semibold">{selectedFile.name}</p>
+                <p className="text-gray-600 text-sm">
                   {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
                 </p>
               </div>
@@ -286,9 +286,9 @@ const ProfilePictureUpload = ({
               onClick={cancelSelection}
               className="
                 flex-1 px-4 py-3 
-                bg-gradient-to-r from-[#0E0B12]/60 to-[#0E0B12]/40 
-                border border-fuchsia-500/20 text-gray-300 
-                rounded-xl hover:bg-fuchsia-500/10 hover:text-white 
+                bg-gray-100 
+                border border-gray-300 text-gray-700 
+                rounded-xl hover:bg-gray-200 hover:text-gray-900 
                 transition-all duration-300 
                 flex items-center justify-center space-x-2
               "
@@ -301,13 +301,12 @@ const ProfilePictureUpload = ({
               onClick={handleUploadAndUpdate}
               className="
                 flex-1 px-4 py-3 
-                bg-gradient-to-r from-fuchsia-500 to-purple-600 
-                hover:from-fuchsia-600 hover:to-purple-700 
+                bg-blue-500 
+                hover:bg-blue-600 
                 text-white rounded-xl 
                 transition-all duration-300 
                 flex items-center justify-center space-x-2
-                shadow-lg shadow-fuchsia-500/30
-                hover:shadow-xl hover:shadow-purple-500/40
+                shadow-lg
                 hover:scale-105 active:scale-95
               "
             >
@@ -319,16 +318,16 @@ const ProfilePictureUpload = ({
       )}
 
       {/* Security note */}
-      <div className="bg-gradient-to-r from-blue-500/10 to-cyan-600/10 border border-blue-500/20 rounded-xl p-4">
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
         <div className="flex items-start space-x-3">
-          <div className="w-8 h-8 bg-gradient-to-r from-blue-500/20 to-cyan-600/20 rounded-lg flex items-center justify-center border border-blue-500/30 mt-0.5">
-            <FiShield className="text-blue-400" size={16} />
+          <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center border border-blue-200 mt-0.5">
+            <FiShield className="text-blue-600" size={16} />
           </div>
           <div>
-            <p className="text-blue-300 font-medium text-sm mb-1">
+            <p className="text-blue-900 font-semibold text-sm mb-1">
               Secure Storage
             </p>
-            <p className="text-blue-200/80 text-xs leading-relaxed">
+            <p className="text-blue-700 text-xs leading-relaxed">
               Your profile picture is stored on IPFS (InterPlanetary File
               System) and linked to your blockchain identity. This ensures
               decentralized, permanent storage of your image.
@@ -337,59 +336,6 @@ const ProfilePictureUpload = ({
         </div>
       </div>
 
-      {/* Custom Styles */}
-      <style jsx>{`
-        /* Enhanced hover effects */
-        @keyframes profile-glow {
-          0%,
-          100% {
-            box-shadow: 0 0 30px rgba(217, 70, 239, 0.2);
-          }
-          50% {
-            box-shadow: 0 0 50px rgba(217, 70, 239, 0.4);
-          }
-        }
-
-        .group:hover .relative {
-          animation: profile-glow 2s ease-in-out infinite;
-        }
-
-        /* Drag and drop animations */
-        @keyframes drag-bounce {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-5px);
-          }
-        }
-
-        .drag-active {
-          animation: drag-bounce 0.6s ease-in-out infinite;
-        }
-
-        /* File upload progress */
-        @keyframes upload-pulse {
-          0%,
-          100% {
-            opacity: 0.5;
-          }
-          50% {
-            opacity: 1;
-          }
-        }
-
-        .upload-progress {
-          animation: upload-pulse 1.5s ease-in-out infinite;
-        }
-
-        /* Focus enhancements */
-        button:focus {
-          outline: 2px solid rgba(217, 70, 239, 0.6);
-          outline-offset: 2px;
-        }
-      `}</style>
     </div>
   );
 };

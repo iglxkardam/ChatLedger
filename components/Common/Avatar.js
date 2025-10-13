@@ -42,14 +42,14 @@ const Avatar = ({
   if (showFallback) {
     return (
       <div
-        className={`${sizeClasses[size]} bg-blue-100 rounded-full flex items-center justify-center ${className}`}
+        className={`${sizeClasses[size]} bg-blue-500 rounded-full flex items-center justify-center ${className}`}
       >
         {name ? (
-          <span className="text-blue-600 font-bold text-sm">
+          <span className="text-white font-semibold text-sm">
             {name.charAt(0).toUpperCase()}
           </span>
         ) : (
-          <FiUser className="text-blue-600" size={iconSizes[size]} />
+          <FiUser className="text-white" size={iconSizes[size]} />
         )}
       </div>
     );

@@ -9,8 +9,15 @@ import {
   FiTrendingUp,
   FiFilter,
   FiDownload,
+  FiSend,
+  FiReceive,
+  FiCalendar,
+  FiRefreshCw,
+  FiChevronUp,
+  FiChevronDown,
 } from "react-icons/fi";
 import { BiTransfer } from "react-icons/bi";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChatAppABI, CONTRACT_ADDRESS } from "../../contracts/ChatApp";
 import { MESSAGE_TYPES } from "../../utils/constants";
 import { formatTokenAmount } from "../../utils/tokenUtils";
@@ -163,78 +170,77 @@ const TransferHistory = () => {
 
   if (loading) {
     return (
-      <div className="space-y-8 relative overflow-hidden">
-        {/* Background elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-fuchsia-500/5 to-purple-600/5 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-purple-600/5 to-fuchsia-500/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
-
-        <div className="relative z-10 flex items-center space-x-4">
-          <div className="w-12 h-12 bg-gradient-to-r from-fuchsia-500/20 to-purple-600/20 rounded-xl flex items-center justify-center border border-fuchsia-500/30">
-            <BiTransfer className="text-fuchsia-400" size={24} />
+      <motion.div 
+        className="flex h-full flex-col bg-messenger-chat-bg"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        {/* Header */}
+        <div className="bg-white border-b border-gray-200 px-6 py-6">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+              <BiTransfer className="text-blue-600" size={24} />
           </div>
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-fuchsia-400 to-purple-400 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold text-gray-900">
               Transfer History
             </h1>
-            <p className="text-gray-400">Loading your transaction history...</p>
+              <p className="text-gray-600">Loading your transaction history...</p>
+            </div>
           </div>
         </div>
 
-        <div className="relative z-10 bg-gradient-to-br from-[#0E0B12]/80 to-[#0E0B12]/60 backdrop-blur-xl rounded-2xl border border-fuchsia-500/20 shadow-2xl shadow-purple-600/10 p-8">
-          <div className="flex items-center justify-center py-12">
-            <div className="relative">
-              <div className="w-12 h-12 border-4 border-fuchsia-500/20 border-t-fuchsia-500 rounded-full animate-spin"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <BiTransfer
-                  className="text-fuchsia-400 animate-pulse"
-                  size={20}
-                />
-              </div>
+        {/* Loading Content */}
+        <div className="flex-1 bg-white flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin mx-auto"></div>
+            <div className="space-y-2">
+              <p className="text-lg font-medium text-gray-900">Loading transfers...</p>
+              <p className="text-gray-600">Please wait while we fetch your transaction history</p>
             </div>
-            <span className="ml-4 text-white font-medium">
-              Loading transfer history...
-            </span>
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="space-y-8 relative overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-fuchsia-500/5 to-purple-600/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-purple-600/5 to-fuchsia-500/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(217,70,239,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(217,70,239,0.02)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
-        <div className="absolute top-20 right-20 w-2 h-2 bg-fuchsia-400/30 rounded-full animate-ping"></div>
-        <div className="absolute bottom-32 left-16 w-1 h-1 bg-purple-400/30 rounded-full animate-pulse delay-500"></div>
-      </div>
-
+    <motion.div 
+      className="flex h-full flex-col bg-messenger-chat-bg overflow-hidden"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       {/* Header */}
-      <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+      <motion.div 
+        className="bg-white border-b border-gray-200 px-6 py-6 flex-shrink-0"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+      >
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
         <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 bg-gradient-to-r from-fuchsia-500/20 to-purple-600/20 rounded-xl flex items-center justify-center border border-fuchsia-500/30">
-            <BiTransfer className="text-fuchsia-400" size={24} />
+            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+              <BiTransfer className="text-blue-600" size={24} />
           </div>
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-fuchsia-400 to-purple-400 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold text-gray-900">
               Transfer History
             </h1>
-            <p className="text-gray-400">
+              <p className="text-gray-600">
               Track your AVAX and token transactions
             </p>
           </div>
         </div>
 
         {/* Export button */}
-        <button className="px-4 py-3 bg-gradient-to-r from-blue-500/20 to-cyan-600/20 border border-blue-500/30 text-blue-300 rounded-xl hover:from-blue-500/30 hover:to-cyan-600/30 transition-all duration-300 flex items-center space-x-2">
+          <button className="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors duration-200">
           <FiDownload size={16} />
           <span>Export CSV</span>
         </button>
       </div>
+      </motion.div>
 
       {/* Hidden components to fetch data for each friend */}
       {friendsList?.map((friend) => (
@@ -246,16 +252,22 @@ const TransferHistory = () => {
       ))}
 
       {/* Transfer Statistics */}
-      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-[#0E0B12]/80 to-[#0E0B12]/60 backdrop-blur-xl rounded-2xl border border-red-500/20 shadow-xl shadow-red-600/10 p-6 text-center group hover:scale-105 transition-all duration-300">
-          <div className="w-16 h-16 bg-gradient-to-r from-red-500/20 to-pink-600/20 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-red-500/30 group-hover:scale-110 transition-transform duration-300">
-            <FiArrowUpRight className="text-red-400" size={28} />
+      <motion.div 
+        className="px-6 py-4 flex-shrink-0"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.2 }}
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white border border-gray-200 rounded-xl p-6 text-center hover:shadow-md transition-shadow duration-200">
+            <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <FiArrowUpRight className="text-red-600" size={24} />
           </div>
-          <p className="text-3xl font-bold text-red-300 mb-2">
+            <p className="text-2xl font-bold text-gray-900 mb-1">
             {transfers.filter((t) => !t.isReceived && t.type === "AVAX").length}
           </p>
-          <p className="text-gray-400">AVAX Sent</p>
-          <div className="mt-2 text-xs text-red-400/60">
+            <p className="text-gray-600 font-medium">AVAX Sent</p>
+            <div className="mt-2 text-sm text-red-600">
             {transfers
               .filter((t) => !t.isReceived && t.type === "AVAX")
               .reduce(
@@ -268,15 +280,15 @@ const TransferHistory = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-[#0E0B12]/80 to-[#0E0B12]/60 backdrop-blur-xl rounded-2xl border border-green-500/20 shadow-xl shadow-green-600/10 p-6 text-center group hover:scale-105 transition-all duration-300">
-          <div className="w-16 h-16 bg-gradient-to-r from-green-500/20 to-emerald-600/20 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-green-500/30 group-hover:scale-110 transition-transform duration-300">
-            <FiArrowDownLeft className="text-green-400" size={28} />
+          <div className="bg-white border border-gray-200 rounded-xl p-6 text-center hover:shadow-md transition-shadow duration-200">
+            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <FiArrowDownLeft className="text-green-600" size={24} />
           </div>
-          <p className="text-3xl font-bold text-green-300 mb-2">
+            <p className="text-2xl font-bold text-gray-900 mb-1">
             {transfers.filter((t) => t.isReceived && t.type === "AVAX").length}
           </p>
-          <p className="text-gray-400">AVAX Received</p>
-          <div className="mt-2 text-xs text-green-400/60">
+            <p className="text-gray-600 font-medium">AVAX Received</p>
+            <div className="mt-2 text-sm text-green-600">
             {transfers
               .filter((t) => t.isReceived && t.type === "AVAX")
               .reduce(
@@ -289,32 +301,39 @@ const TransferHistory = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-[#0E0B12]/80 to-[#0E0B12]/60 backdrop-blur-xl rounded-2xl border border-blue-500/20 shadow-xl shadow-blue-600/10 p-6 text-center group hover:scale-105 transition-all duration-300">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-500/20 to-cyan-600/20 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-blue-500/30 group-hover:scale-110 transition-transform duration-300">
-            <BiTransfer className="text-blue-400" size={28} />
+          <div className="bg-white border border-gray-200 rounded-xl p-6 text-center hover:shadow-md transition-shadow duration-200">
+            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <BiTransfer className="text-blue-600" size={24} />
+            </div>
+            <p className="text-2xl font-bold text-gray-900 mb-1">
+              {process.env.NEXT_PUBLIC_NETWORK || "Ethereum"}
+            </p>
+            <p className="text-gray-600 font-medium">Network</p>
+            <div className="mt-2 text-sm text-blue-600">Blockchain</div>
           </div>
-          <p className="text-3xl font-bold text-blue-300 mb-2">
-            {process.env.NEXT_PUBLIC_NETWORK}
-          </p>
-          <p className="text-gray-400">Network</p>
-          <div className="mt-2 text-xs text-blue-400/60">Blockchain</div>
-        </div>
 
-        <div className="bg-gradient-to-br from-[#0E0B12]/80 to-[#0E0B12]/60 backdrop-blur-xl rounded-2xl border border-purple-500/20 shadow-xl shadow-purple-600/10 p-6 text-center group hover:scale-105 transition-all duration-300">
-          <div className="w-16 h-16 bg-gradient-to-r from-purple-500/20 to-violet-600/20 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-purple-500/30 group-hover:scale-110 transition-transform duration-300">
-            <BiTransfer className="text-purple-400" size={28} />
-          </div>
-          <p className="text-3xl font-bold text-purple-300 mb-2">TBC</p>
-          <p className="text-gray-400">Native Tokens </p>
-          <div className="mt-2 text-xs text-purple-400/60">Various tokens</div>
+          <div className="bg-white border border-gray-200 rounded-xl p-6 text-center hover:shadow-md transition-shadow duration-200">
+            <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <BiTransfer className="text-purple-600" size={24} />
         </div>
-      </div>
+            <p className="text-2xl font-bold text-gray-900 mb-1">TBC</p>
+            <p className="text-gray-600 font-medium">Native Tokens</p>
+            <div className="mt-2 text-sm text-purple-600">Various tokens</div>
+          </div>
+        </div>
+      </motion.div>
 
       {/* Filters */}
-      <div className="relative z-10 flex flex-wrap gap-4 items-center">
+      <motion.div 
+        className="px-6 py-2 flex-shrink-0"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.3 }}
+      >
+        <div className="flex flex-wrap gap-4 items-center">
         <div className="flex items-center space-x-2">
-          <FiFilter className="text-gray-400" size={16} />
-          <span className="text-gray-300 text-sm">Filter by:</span>
+            <FiFilter className="text-gray-500" size={16} />
+            <span className="text-gray-700 text-sm font-medium">Filter by:</span>
         </div>
 
         <div className="flex space-x-2">
@@ -326,10 +345,10 @@ const TransferHistory = () => {
             <button
               key={type.id}
               onClick={() => setFilterType(type.id)}
-              className={`px-3 py-2 rounded-lg text-sm transition-all duration-300 ${
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
                 filterType === type.id
-                  ? "bg-gradient-to-r from-fuchsia-500/30 to-purple-600/30 border border-fuchsia-500/50 text-white"
-                  : "bg-[#0E0B12]/40 border border-fuchsia-500/20 text-gray-400 hover:text-white hover:border-fuchsia-500/40"
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               {type.label}
@@ -346,10 +365,10 @@ const TransferHistory = () => {
             <button
               key={direction.id}
               onClick={() => setFilterDirection(direction.id)}
-              className={`px-3 py-2 rounded-lg text-sm transition-all duration-300 ${
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
                 filterDirection === direction.id
-                  ? "bg-gradient-to-r from-blue-500/30 to-cyan-600/30 border border-blue-500/50 text-white"
-                  : "bg-[#0E0B12]/40 border border-blue-500/20 text-gray-400 hover:text-white hover:border-blue-500/40"
+                    ? "bg-green-500 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               {direction.label}
@@ -357,65 +376,105 @@ const TransferHistory = () => {
           ))}
         </div>
       </div>
+      </motion.div>
 
       {/* Transfer List */}
-      <div className="relative z-10 bg-gradient-to-br from-[#0E0B12]/80 to-[#0E0B12]/60 backdrop-blur-xl rounded-2xl border border-fuchsia-500/20 shadow-2xl shadow-purple-600/10 overflow-hidden">
+      <motion.div 
+        className="flex-1 bg-white mx-6 mb-6 rounded-xl border border-gray-200 overflow-hidden min-h-0"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.4 }}
+      >
         {/* Header */}
-        <div className="p-6 border-b border-fuchsia-500/20 bg-gradient-to-r from-fuchsia-500/5 to-purple-600/5">
+        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-fuchsia-500/20 to-purple-600/20 rounded-xl flex items-center justify-center border border-fuchsia-500/30">
-                <FiActivity className="text-fuchsia-400" size={18} />
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <FiActivity className="text-blue-600" size={20} />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-white">
+                <h2 className="text-xl font-semibold text-gray-900">
                   Recent Transfers
                 </h2>
-                <p className="text-gray-400 text-sm">
+                <p className="text-gray-600 text-sm">
                   {filteredTransfers.length} transactions
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-2 bg-gradient-to-r from-green-500/20 to-emerald-600/20 border border-green-500/30 rounded-lg px-3 py-1">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-green-300 text-sm">Live</span>
+            <div className="flex items-center gap-3">
+              {/* Scroll Buttons */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    const scrollContainer = document.querySelector('.transfer-scrollbar');
+                    if (scrollContainer) {
+                      scrollContainer.scrollBy({ top: -100, behavior: 'smooth' });
+                    }
+                  }}
+                  className="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors duration-200"
+                  title="Scroll up"
+                >
+                  <FiChevronUp className="text-gray-600" size={16} />
+                </button>
+                <button
+                  onClick={() => {
+                    const scrollContainer = document.querySelector('.transfer-scrollbar');
+                    if (scrollContainer) {
+                      scrollContainer.scrollBy({ top: 100, behavior: 'smooth' });
+                    }
+                  }}
+                  className="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors duration-200"
+                  title="Scroll down"
+                >
+                  <FiChevronDown className="text-gray-600" size={16} />
+                </button>
+              </div>
+
+              <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-3 py-1 rounded-lg text-sm font-medium">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>Live</span>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Transfer items */}
-        <div className="p-6 max-h-96 overflow-y-auto space-y-4">
+        <div className="flex-1 overflow-y-auto min-h-0 transfer-scrollbar">
+          <div className="p-6 space-y-4">
           {filteredTransfers.length > 0 ? (
             filteredTransfers.map((transfer, index) => (
-              <div
+                <motion.div
                 key={index}
-                className="group flex items-center justify-between p-4 bg-gradient-to-r from-[#0E0B12]/40 to-[#0E0B12]/20 backdrop-blur-sm rounded-xl border border-white/5 hover:border-fuchsia-500/20 transition-all duration-300 hover:scale-[1.02]"
-                style={{ animationDelay: `${index * 50}ms` }}
+                  className="flex items-center justify-between p-4 bg-gray-50 hover:bg-blue-50 rounded-lg border border-gray-200 transition-colors duration-200"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.2, delay: index * 0.05 }}
+                  whileHover={{ scale: 1.02 }}
               >
                 <div className="flex items-center space-x-4">
                   <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-300 group-hover:scale-110 ${
+                      className={`w-12 h-12 rounded-lg flex items-center justify-center transition-colors duration-200 ${
                       transfer.isReceived
-                        ? "bg-gradient-to-r from-green-500/20 to-emerald-600/20 border-green-500/30"
-                        : "bg-gradient-to-r from-red-500/20 to-pink-600/20 border-red-500/30"
+                          ? "bg-green-100 text-green-600"
+                          : "bg-red-100 text-red-600"
                     }`}
                   >
                     {transfer.isReceived ? (
-                      <FiArrowDownLeft className="text-green-400" size={20} />
+                        <FiArrowDownLeft size={20} />
                     ) : (
-                      <FiArrowUpRight className="text-red-400" size={20} />
+                        <FiArrowUpRight size={20} />
                     )}
                   </div>
 
                   <div>
-                    <p className="font-medium text-white">
+                      <p className="font-medium text-gray-900">
                       {transfer.isReceived ? "Received from" : "Sent to"}{" "}
-                      <span className="text-fuchsia-300">
+                        <span className="text-blue-600">
                         {transfer.friendName}
                       </span>
                     </p>
-                    <p className="text-sm text-gray-300 mt-1">
+                      <p className="text-sm text-gray-600 mt-1">
                       {transfer.content}
                     </p>
                     <p className="text-xs text-gray-500 mt-1">
@@ -429,17 +488,17 @@ const TransferHistory = () => {
                 <div className="text-right">
                   <div className="flex items-center space-x-2 mb-1">
                     {transfer.type === "AVAX" ? (
-                      <div className="w-6 h-6 bg-gradient-to-r from-orange-500/20 to-yellow-600/20 rounded-lg flex items-center justify-center border border-orange-500/30">
-                        <FiDollarSign className="text-orange-400" size={14} />
+                        <div className="w-6 h-6 bg-orange-100 rounded-lg flex items-center justify-center">
+                          <FiDollarSign className="text-orange-600" size={14} />
                       </div>
                     ) : (
-                      <div className="w-6 h-6 bg-gradient-to-r from-blue-500/20 to-cyan-600/20 rounded-lg flex items-center justify-center border border-blue-500/30">
-                        <BiTransfer className="text-blue-400" size={14} />
+                        <div className="w-6 h-6 bg-blue-100 rounded-lg flex items-center justify-center">
+                          <BiTransfer className="text-blue-600" size={14} />
                       </div>
                     )}
                     <span
                       className={`font-bold text-lg ${
-                        transfer.isReceived ? "text-green-300" : "text-red-300"
+                          transfer.isReceived ? "text-green-600" : "text-red-600"
                       }`}
                     >
                       {transfer.isReceived ? "+" : "-"}
@@ -447,281 +506,30 @@ const TransferHistory = () => {
                     </span>
                   </div>
                   {transfer.type === "TOKEN" && (
-                    <p className="text-xs text-gray-500 font-mono bg-black/20 px-2 py-1 rounded">
+                      <p className="text-xs text-gray-500 font-mono bg-gray-100 px-2 py-1 rounded">
                       {transfer.tokenAddress?.slice(0, 6)}...
                       {transfer.tokenAddress?.slice(-4)}
                     </p>
                   )}
                 </div>
-              </div>
+                </motion.div>
             ))
           ) : (
-            <div className="text-center py-12">
-              <div className="w-20 h-20 bg-gradient-to-r from-fuchsia-500/20 to-purple-600/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-fuchsia-500/30">
-                <BiTransfer className="text-fuchsia-400" size={40} />
+              <div className="text-center py-16">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <BiTransfer className="text-gray-400" size={40} />
               </div>
-              <p className="text-gray-400 text-lg mb-2">No transfers found</p>
-              <p className="text-gray-500 text-sm">
+                <p className="text-gray-900 text-lg font-medium mb-2">No transfers found</p>
+                <p className="text-gray-600 text-sm">
                 Start sending AVAX or tokens to see your history!
-              </p>
-              <div className="flex space-x-1 justify-center mt-4">
-                <div className="w-2 h-2 bg-fuchsia-400/40 rounded-full animate-pulse"></div>
-                <div className="w-2 h-2 bg-purple-400/40 rounded-full animate-pulse delay-200"></div>
-                <div className="w-2 h-2 bg-fuchsia-400/40 rounded-full animate-pulse delay-400"></div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Transfer Summary */}
-      {transfers.length > 0 && (
-        <div className="relative z-10 bg-gradient-to-br from-[#0E0B12]/80 to-[#0E0B12]/60 backdrop-blur-xl rounded-2xl border border-fuchsia-500/20 shadow-2xl shadow-purple-600/10 overflow-hidden">
-          <div className="p-6 border-b border-fuchsia-500/20 bg-gradient-to-r from-fuchsia-500/5 to-purple-600/5">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-fuchsia-500/20 to-purple-600/20 rounded-xl flex items-center justify-center border border-fuchsia-500/30">
-                <FiTrendingUp className="text-fuchsia-400" size={18} />
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold text-white">
-                  Transfer Summary
-                </h2>
-                <p className="text-gray-400 text-sm">
-                  Your transaction overview
                 </p>
               </div>
-            </div>
-          </div>
-
-          <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* AVAX Summary */}
-            <div className="bg-gradient-to-r from-[#0E0B12]/40 to-[#0E0B12]/20 backdrop-blur-sm rounded-xl border border-orange-500/20 p-4">
-              <h3 className="font-medium text-orange-300 mb-4 flex items-center">
-                <FiDollarSign className="mr-2" size={16} />
-                AVAX Transfers
-              </h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-400">Total Sent:</span>
-                  <span className="font-medium text-red-300">
-                    {transfers
-                      .filter((t) => !t.isReceived && t.type === "AVAX")
-                      .reduce(
-                        (sum, t) =>
-                          sum + parseFloat(ethers.utils.formatEther(t.amount)),
-                        0
-                      )
-                      .toFixed(4)}{" "}
-                    AVAX
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-400">Total Received:</span>
-                  <span className="font-medium text-green-300">
-                    {transfers
-                      .filter((t) => t.isReceived && t.type === "AVAX")
-                      .reduce(
-                        (sum, t) =>
-                          sum + parseFloat(ethers.utils.formatEther(t.amount)),
-                        0
-                      )
-                      .toFixed(4)}{" "}
-                    AVAX
-                  </span>
-                </div>
-                <div className="pt-2 border-t border-orange-500/20">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Net Balance:</span>
-                    <span className="font-bold text-orange-300">
-                      {(
-                        transfers
-                          .filter((t) => t.isReceived && t.type === "AVAX")
-                          .reduce(
-                            (sum, t) =>
-                              sum +
-                              parseFloat(ethers.utils.formatEther(t.amount)),
-                            0
-                          ) -
-                        transfers
-                          .filter((t) => !t.isReceived && t.type === "AVAX")
-                          .reduce(
-                            (sum, t) =>
-                              sum +
-                              parseFloat(ethers.utils.formatEther(t.amount)),
-                            0
-                          )
-                      ).toFixed(4)}{" "}
-                      AVAX
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Token Summary */}
-            <div className="bg-gradient-to-r from-[#0E0B12]/40 to-[#0E0B12]/20 backdrop-blur-sm rounded-xl border border-blue-500/20 p-4">
-              <h3 className="font-medium text-blue-300 mb-4 flex items-center">
-                <BiTransfer className="mr-2" size={16} />
-                Token Transfers
-              </h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-400">Tokens Sent:</span>
-                  <span className="font-medium text-red-300">
-                    {
-                      transfers.filter(
-                        (t) => !t.isReceived && t.type === "TOKEN"
-                      ).length
-                    }
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-400">Tokens Received:</span>
-                  <span className="font-medium text-green-300">
-                    {
-                      transfers.filter(
-                        (t) => t.isReceived && t.type === "TOKEN"
-                      ).length
-                    }
-                  </span>
-                </div>
-                <div className="pt-2 border-t border-blue-500/20">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Total Transactions:</span>
-                    <span className="font-bold text-blue-300">
-                      {transfers.filter((t) => t.type === "TOKEN").length}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
-      )}
+      </motion.div>
 
-      {/* Custom Styles */}
-      <style jsx>{`
-        /* Custom scrollbar */
-        .overflow-y-auto::-webkit-scrollbar {
-          width: 6px;
-        }
-
-        .overflow-y-auto::-webkit-scrollbar-track {
-          background: rgba(14, 11, 18, 0.3);
-        }
-
-        .overflow-y-auto::-webkit-scrollbar-thumb {
-          background: linear-gradient(45deg, #d946ef, #9333ea);
-          border-radius: 3px;
-        }
-
-        .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(45deg, #c026d3, #7c3aed);
-        }
-
-        /* Staggered animations */
-        @keyframes slide-in-up {
-          0% {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .group {
-          animation: slide-in-up 0.6s ease-out forwards;
-        }
-
-        /* Enhanced hover effects */
-        @keyframes transfer-glow {
-          0%,
-          100% {
-            box-shadow: 0 10px 40px -10px rgba(217, 70, 239, 0.2);
-          }
-          50% {
-            box-shadow: 0 15px 60px -10px rgba(217, 70, 239, 0.4);
-          }
-        }
-
-        .group:hover {
-          animation: transfer-glow 2s ease-in-out infinite;
-        }
-
-        /* Filter button animations */
-        @keyframes filter-pulse {
-          0%,
-          100% {
-            opacity: 0.8;
-          }
-          50% {
-            opacity: 1;
-          }
-        }
-
-        .filter-active {
-          animation: filter-pulse 2s ease-in-out infinite;
-        }
-
-        /* Loading shimmer effect */
-        @keyframes shimmer {
-          0% {
-            background-position: -200px 0;
-          }
-          100% {
-            background-position: calc(200px + 100%) 0;
-          }
-        }
-
-        .loading-shimmer {
-          background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(217, 70, 239, 0.1),
-            transparent
-          );
-          background-size: 200px 100%;
-          animation: shimmer 2s infinite;
-        }
-
-        /* Focus enhancements */
-        button:focus {
-          outline: 2px solid rgba(217, 70, 239, 0.6);
-          outline-offset: 2px;
-        }
-
-        /* Transfer amount animations */
-        @keyframes amount-highlight {
-          0% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.05);
-          }
-          100% {
-            transform: scale(1);
-          }
-        }
-
-        .amount-animate {
-          animation: amount-highlight 0.3s ease-in-out;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 640px) {
-          .mobile-stack {
-            flex-direction: column;
-            align-items: flex-start;
-          }
-
-          .mobile-full {
-            width: 100%;
-          }
-        }
-      `}</style>
-    </div>
+    </motion.div>
   );
 };
 

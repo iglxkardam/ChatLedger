@@ -8,7 +8,24 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Cyberpunk theme colors
+        // Messenger-style theme colors
+        messenger: {
+          bg: '#f0f2f5',
+          panel: '#ffffff',
+          sidebar: '#ffffff',
+          accent: '#1877f2',
+          'accent-hover': '#166fe5',
+          text: '#1c1e21',
+          'text-muted': '#65676b',
+          border: '#dadde1',
+          hover: '#f5f6f7',
+          'chat-bg': '#f0f2f5',
+          'message-sent': '#1877f2',
+          'message-received': '#ffffff',
+          online: '#42b883',
+          shadow: 'rgba(0, 0, 0, 0.1)',
+        },
+        // Legacy colors for compatibility
         accent: {
           electric: '#00F5FF',
           plasma: '#FF0080',
@@ -28,7 +45,6 @@ module.exports = {
           900: '#0f172a',
           950: '#020617',
         },
-        // Legacy colors for compatibility
         neon: {
           50: '#f0f9ff',
           100: '#e0f2fe',
@@ -52,29 +68,10 @@ module.exports = {
           700: '#a21caf',
           800: '#86198f',
           900: '#701a75',
-        },
-        dark: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
-          950: '#020617',
-        },
-        accent: {
-          electric: '#00f5ff',
-          plasma: '#ff0080',
-          quantum: '#8b5cf6',
-          crystal: '#06ffa5',
-          neon: '#ffd700',
         }
       },
       fontFamily: {
+        'messenger': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         'cyber': ['Orbitron', 'monospace'],
         'futura': ['Inter', 'system-ui', 'sans-serif'],
         'display': ['Space Grotesk', 'system-ui', 'sans-serif'],
