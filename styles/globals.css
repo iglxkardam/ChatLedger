@@ -37,6 +37,25 @@ body {
   --messenger-shadow: rgba(0, 0, 0, 0.1);
 }
 
+/* Dark theme variables when data-theme="dark" is set on <html> */
+[data-theme="dark"] {
+  /* Lighter dark palette so dark UI elements (black text/icons) remain visible */
+  --messenger-bg: #0f1724; /* softer dark background (slate-900) */
+  --messenger-panel: rgba(15,23,36,0.75); /* slightly lighter panel with subtle transparency */
+  --messenger-sidebar: rgba(15,23,36,0.7);
+  --messenger-accent: #D345EF;
+  --messenger-accent-hover: #b435d8;
+  --messenger-text: #E6EEF8; /* off-white for better contrast */
+  --messenger-text-muted: #9aa3b2;
+  --messenger-border: rgba(255,255,255,0.06);
+  --messenger-hover: rgba(255,255,255,0.02);
+  --messenger-chat-bg: #0b1220; /* chat area slightly different shade */
+  --messenger-message-sent: linear-gradient(135deg,#3b82f6,#2563eb);
+  --messenger-message-received: rgba(255,255,255,0.03);
+  --messenger-online: #42b883;
+  --messenger-shadow: rgba(0,0,0,0.45);
+}
+
 @layer base {
   html,
   body {
@@ -64,6 +83,19 @@ body {
     scroll-behavior: smooth;
   }
 }
+
+/* Lightweight utility mappings so Tailwind classes and components can rely on CSS variables
+  These are defined after Tailwind so they override generated utility classes where needed. */
+.bg-messenger-bg { background-color: var(--messenger-bg) !important; }
+.bg-messenger-panel { background-color: var(--messenger-panel) !important; }
+.bg-messenger-sidebar { background-color: var(--messenger-sidebar) !important; }
+.bg-messenger-chat-bg { background-color: var(--messenger-chat-bg) !important; }
+.text-messenger { color: var(--messenger-text) !important; }
+.text-messenger-muted { color: var(--messenger-text-muted) !important; }
+.border-messenger { border-color: var(--messenger-border) !important; }
+.hover-messenger:hover { background-color: var(--messenger-hover) !important; }
+.messenger-shadow { box-shadow: 0 2px 8px var(--messenger-shadow) !important; }
+
 
 @layer components {
   /* Messenger-style panels */

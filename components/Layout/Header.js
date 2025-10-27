@@ -3,19 +3,20 @@ import { useAccount } from "wagmi";
 import { FiMenu } from "react-icons/fi";
 import CustomConnectButton from "./CustomConnectButton";
 import Avatar from "../Common/Avatar";
+import ThemeToggle from "./ThemeToggle";
 
 const Header = ({ onMenuClick, isMobileMenuOpen, selectedFriend, activeTab }) => {
   const { address, isConnected } = useAccount();
 
   return (
-    <header className="bg-white border-b border-gray-200 px-4 py-3 shadow-sm">
+    <header className="bg-messenger-panel border-b border-messenger px-4 py-3 messenger-shadow">
       <div className="flex items-center justify-between">
         {/* Left Section - Mobile Menu + Contact Info */}
         <div className="flex items-center space-x-4 flex-1">
           {/* Mobile Menu Button */}
           <button
             onClick={onMenuClick}
-            className="lg:hidden p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
+            className="lg:hidden p-2 text-messenger-muted hover:text-messenger rounded-full hover-messenger transition-colors"
           >
             <FiMenu
               size={20}
@@ -38,28 +39,28 @@ const Header = ({ onMenuClick, isMobileMenuOpen, selectedFriend, activeTab }) =>
                 <div className="online-indicator"></div>
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-messenger">
                   {selectedFriend.name}
                 </h2>
-                <p className="text-sm text-gray-500">Active now</p>
+                <p className="text-sm text-messenger-muted">Active now</p>
               </div>
             </div>
           ) : (
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                <span className="text-gray-400 text-sm font-semibold">
+              <div className="w-10 h-10 bg-messenger-sidebar rounded-full flex items-center justify-center">
+                <span className="text-messenger-muted text-sm font-semibold">
                   {activeTab === "chat" ? "💬" : activeTab === "dashboard" ? "📊" : "⚙️"}
                 </span>
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-messenger">
                   {activeTab === "chat" ? "Select a conversation" : 
                    activeTab === "dashboard" ? "Dashboard" : 
                    activeTab === "friends" ? "Friends" : 
                    activeTab === "profile" ? "Profile" : 
                    activeTab === "settings" ? "Settings" : "ChatLedger"}
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-messenger-muted">
                   {activeTab === "chat" ? "Choose a friend to start chatting" : 
                    activeTab === "dashboard" ? "Monitor your activity" : 
                    activeTab === "friends" ? "Manage your connections" : 
@@ -73,6 +74,7 @@ const Header = ({ onMenuClick, isMobileMenuOpen, selectedFriend, activeTab }) =>
 
         {/* Right Section - Connect Button Only */}
         <div className="flex items-center">
+          <ThemeToggle />
           <CustomConnectButton />
         </div>
       </div>

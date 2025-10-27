@@ -60,6 +60,13 @@ const nextConfig = {
       type: "javascript/auto",
     });
 
+    // Alias react-native async-storage imports to a lightweight web shim
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@react-native-async-storage/async-storage': require('path').resolve(__dirname, 'polyfills/async-storage-shim.js')
+    };
+
     return config;
   },
   // If you're using static export

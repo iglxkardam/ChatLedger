@@ -1,11 +1,20 @@
 import { ethers } from "ethers";
-import ABI from "../web3/artifacts/contracts/TheBlockchainCoders.sol/TheBlockchainCoders.json";
 
-// Enhanced ERC20 ABI with all standard functions
-export const ERC20_ABI = ABI.abi;
+// Minimal standard ERC20 ABI (name, symbol, decimals, balanceOf, allowance, transfer, transferFrom)
+export const ERC20_ABI = [
+  "function name() view returns (string)",
+  "function symbol() view returns (string)",
+  "function decimals() view returns (uint8)",
+  "function totalSupply() view returns (uint256)",
+  "function balanceOf(address) view returns (uint256)",
+  "function allowance(address,address) view returns (uint256)",
+  "function approve(address,uint256) returns (bool)",
+  "function transfer(address,uint256) returns (bool)",
+  "function transferFrom(address,address,uint256) returns (bool)",
+];
 
-// Alternative minimal ABI for testing
-export const MINIMAL_ERC20_ABI = ABI.abi;
+// Minimal ABI alias
+export const MINIMAL_ERC20_ABI = ERC20_ABI;
 
 // Validate if address is a valid contract address
 export const isValidAddress = (address) => {
