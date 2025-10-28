@@ -2,7 +2,7 @@
 
 This repository contains a Next.js + Wagmi chat dApp that stores chat metadata on-chain and media on IPFS.
 
-Quick notes before pushing:
+Quick notes before deploying:
 
 - Do NOT commit any `.env` files containing secrets. This repo now includes `.gitignore` rules for `.env` and `.env.local`.
 - Rotate any Pinata/API keys that were accidentally committed and revoke exposed tokens.
@@ -17,19 +17,46 @@ npm install
 npm run dev
 ```
 
-How to push to GitHub (recommended):
+## Deploying on Vercel
 
-1. Create a new repository on GitHub named `ChatLedger` (or use GitHub CLI below).
-2. Make sure you have removed secrets from the working tree and git history (see instructions below).
-3. Add remote and push:
+This project uses static export. We build with Next and serve the `out` directory.
+
+Vercel settings (Dashboard):
+
+- Git Repository: github.com/sachinkardam00/ChatLedger
+- Production Branch: `main`
+- Framework Preset: Next.js
+- Build Command: `npm run build`
+- Output Directory: `out`
+- Node.js Version: 18.x
+
+Environment Variables (Project Settings → Environment Variables):
+
+Copy from `.env.example` and create these (Production + Preview):
+
+- `NEXT_PUBLIC_PLATFORM_NAME`
+- `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID`
+- `NEXT_PUBLIC_RPC_URL`
+- `NEXT_PUBLIC_CHAIN_ID`
+- `NEXT_PUBLIC_CHAIN_NAME`
+- `NEXT_PUBLIC_CHAIN_SYMBOL`
+- `NEXT_PUBLIC_NETWORK`
+- `NEXT_PUBLIC_BLOCK_EXPLORER_NAME`
+- `NEXT_PUBLIC_BLOCK_EXPLORER`
+
+Then trigger a Deploy on the Vercel dashboard.
+
+### CLI deploy (optional)
 
 ```powershell
-# if creating repo on GitHub web first:
-git remote add origin git@github.com:<your-username>/ChatLedger.git
-git push -u origin master
+# one-time: login and link the project
+npm i -g vercel
+vercel login
+vercel link --project ChatLedger
 
-# OR using GitHub CLI (if authenticated):
-gh repo create ChatLedger --public --source=. --remote=origin --push
+# build and deploy using the static output (no serverless)
+npm run build
+vercel deploy --prebuilt --prod
 ```
 
-If you need help scrubbing secrets from history or automating the push, see the notes below or ask me to run the exact commands (you must have appropriate auth configured locally).
+The `vercel.json` in the repo already points Vercel to serve the `out` folder.
