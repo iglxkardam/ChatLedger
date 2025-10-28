@@ -1,7 +1,8 @@
+import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import AppShellSimple from '../components/Layout/AppShellSimple'
 
-export default function TestPage() {
+function TestPage() {
   return (
     <AppShellSimple>
       <div className="p-8">
@@ -14,3 +15,6 @@ export default function TestPage() {
     </AppShellSimple>
   )
 }
+
+// Disable SSR for this page to avoid export-time React 130 errors from browser-only libs
+export default dynamic(() => Promise.resolve(TestPage), { ssr: false })

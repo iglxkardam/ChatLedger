@@ -11,7 +11,12 @@ import {
   FiSend as Send,
   FiZap as Zap
 } from 'react-icons/fi'
-import CustomConnectButton from './CustomConnectButton'
+import dynamic from 'next/dynamic'
+// RainbowKit's ConnectButton relies on browser APIs; avoid SSR to prevent export/prerender errors
+const CustomConnectButton = dynamic(() => import('./CustomConnectButton'), {
+  ssr: false,
+  loading: () => <div />,
+})
 
 const AppShellSimple = ({ children, activeTab = 'dashboard', setActiveTab }) => {
   const { address, isConnected } = useAccount()
