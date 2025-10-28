@@ -6,11 +6,11 @@ import {
   FiMessageCircle as MessageCircle, 
   FiUsers as Users, 
   FiSettings as Settings, 
-  FiWallet as Wallet, 
   FiKey as Key, 
   FiSend as Send,
   FiZap as Zap
 } from 'react-icons/fi'
+import { RiWallet3Line as Wallet } from 'react-icons/ri'
 import dynamic from 'next/dynamic'
 // RainbowKit's ConnectButton relies on browser APIs; avoid SSR to prevent export/prerender errors
 const CustomConnectButton = dynamic(() => import('./CustomConnectButton'), {
@@ -18,7 +18,7 @@ const CustomConnectButton = dynamic(() => import('./CustomConnectButton'), {
   loading: () => <div />,
 })
 
-const AppShellSimple = ({ children, activeTab = 'dashboard', setActiveTab }) => {
+const AppShellSimple = ({ children, activeTab = 'dashboard', setActiveTab = () => {} }) => {
   const { address, isConnected } = useAccount()
   const [searchQuery, setSearchQuery] = useState('')
 

@@ -1,7 +1,8 @@
 {
   "version": 2,
-  "framework": "nextjs",
+  "builds": [
+    { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "out" } }
+  ],
   "buildCommand": "npm run build",
-  "outputDirectory": "out",
   "cleanUrls": true
 }
